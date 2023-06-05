@@ -1,8 +1,13 @@
 import { Loader } from 'components/loader/Loader';
 import { MovieItem } from 'components/movie_item/MovieItem';
+import {
+  BackButton,
+  DetailBatton,
+} from 'components/styled_components/MovieDeatailButtons';
 import { Suspense, useEffect, useRef, useState } from 'react';
-import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 import { fetchMovieDetails } from 'servise/Api';
+import { HiArrowLeft } from 'react-icons/hi2';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -28,12 +33,14 @@ const MovieDetails = () => {
 
   return (
     <>
-      <Link to={backLinkLocationRef.current}>Back</Link>
+      <BackButton to={backLinkLocationRef.current}>
+        <HiArrowLeft /> Back
+      </BackButton>
       {status === 'responded' && <MovieItem movie={selectedMovie} />}
 
       <nav>
-        <Link to="cast">Cast</Link>
-        <Link to="reviews">Reviews</Link>
+        <DetailBatton to="cast">Cast</DetailBatton>
+        <DetailBatton to="reviews">Reviews</DetailBatton>
       </nav>
       {status === 'pending' && <Loader />}
       {status === 'rejected' && <p>Something went wrong ...</p>}

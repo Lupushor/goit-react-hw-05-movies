@@ -4,7 +4,7 @@ import {
   Button,
   Input,
   SearchForm,
-} from 'components/search_form/SearchForm.styled';
+} from 'components/styled_components/SearchForm.styled';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { fetchMoviesBySearch } from 'servise/Api';

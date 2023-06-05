@@ -2,6 +2,7 @@ import { Loader } from 'components/loader/Loader';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchMovieCredits } from 'servise/Api';
+import { List, Text } from './Cast.styled';
 
 const Cast = () => {
   const { movieId } = useParams();
@@ -28,7 +29,7 @@ const Cast = () => {
       {status === 'rejected' && <p>Something went wrong ...</p>}
 
       {status === 'responded' && (
-        <ul>
+        <List>
           {cast.map(({ id, profile_path, original_name, character }) => {
             return (
               <li key={id}>
@@ -39,14 +40,18 @@ const Cast = () => {
                       : 'https://kartinkin.net/uploads/posts/2022-03/1647018833_14-kartinkin-net-p-anonim-kartinki-20.jpg'
                   }
                   alt={original_name}
-                  width={200}
+                  width={250}
                 />
-                <p>Имя: {original_name}</p>
-                <p>Персонаж: {character}</p>
+                <Text>
+                  <b>Имя:</b> {original_name}
+                </Text>
+                <Text>
+                  <b>Персонаж:</b> {character}
+                </Text>
               </li>
             );
           })}
-        </ul>
+        </List>
       )}
     </>
   );
