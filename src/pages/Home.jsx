@@ -5,19 +5,17 @@ import { fetchTrendingMovies } from 'servise/Api';
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState('idle');
 
   useEffect(() => {
-    setIsLoading(true);
+    setStatus('pending');
     const fetchData = async () => {
       try {
         const data = await fetchTrendingMovies();
         setMovies(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
+        setStatus('responded');
+      } catch {
+        setStatus('rejected');
       }
     };
     fetchData();
@@ -25,9 +23,13 @@ const Home = () => {
 
   return (
     <div>
-      {isLoading && <Loader />}
-      {error && <h2 textAlign="center">Something went wrong ...</h2>}
-      {movies.length > 0 && <MovieList movies={movies} />}
+      {status === 'pending' && <Loader />}
+      {status === 'rejected' && (
+        <h2 textAlign="center">Something went wrong ...</h2>
+      )}
+      {status === 'responded' && movies.length > 0 && (
+        <MovieList movies={movies} />
+      )}
     </div>
   );
 };

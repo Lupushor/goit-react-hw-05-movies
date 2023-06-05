@@ -2,12 +2,12 @@ import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { List, Link, Image, FilmName } from './MovieList.styled';
 
-export const MovieList = ({ products }) => {
+export const MovieList = ({ movies }) => {
   const location = useLocation();
 
   return (
     <List>
-      {products.map(({ id, title, name, poster_path }) => (
+      {movies.map(({ id, title, name, poster_path }) => (
         <li key={id}>
           <Link to={`/movies/${id}`} state={{ from: location }}>
             <Image
@@ -27,5 +27,5 @@ export const MovieList = ({ products }) => {
 };
 
 MovieList.propTypes = {
-  products: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  movies: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
 };

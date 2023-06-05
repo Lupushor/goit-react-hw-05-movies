@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { lazy } from 'react';
 import { Layout } from './layout/Layout';
-import { Container } from './App.styled';
 
 //1 метод
 const Home = lazy(() => import('../pages/Home'));
@@ -19,7 +18,7 @@ const Reviews = lazy(() =>
 
 export const App = () => {
   return (
-    <Container>
+    <>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -28,9 +27,10 @@ export const App = () => {
             <Route path="cast" element={<Cast />} />
             <Route path="reviews" element={<Reviews />} />
           </Route>
+          <Route path="*" element={<Home />} />
         </Route>
       </Routes>
-    </Container>
+    </>
   );
 };
 

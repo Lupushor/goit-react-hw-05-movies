@@ -25,7 +25,7 @@ export const Title = styled.h2`
 `;
 
 export const FilmName = styled.p`
-  width: 300px;
+  max-width: 240px;
   padding: 4px;
   margin-top: 8px;
   margin-bottom: 0;
@@ -34,8 +34,8 @@ export const FilmName = styled.p`
 
 export const Image = styled.img`
   display: block;
-  width: 345px;
-  height: 524px;
+  width: 245px;
+  height: 325px;
   transition: transform 0.3s linear;
 
   &:hover,

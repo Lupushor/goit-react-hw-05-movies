@@ -1,48 +1,52 @@
-import { useState } from 'react';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { Loader } from 'components/loader/Loader';
+import { MovieList } from 'components/movie_list/MovieList';
+import {
+  Button,
+  Input,
+  SearchForm,
+} from 'components/search_form/SearchForm.styled';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { fetchMoviesBySearch } from 'servise/Api';
 
 const Movies = () => {
-  const [movies, setMovies] = useState([
-    'movie-1',
-    'movie-2',
-    'movie-3',
-    'movie-4',
-    'movie-5',
-    'movie-6',
-  ]);
-  const location = useLocation();
+  const [movies, setMovies] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const movieId = searchParams.get('movieId') ?? '';
+  const query = searchParams.get('query') ?? '';
+  const [status, setStatus] = useState('idle');
 
-  //   useEffect(() => {
-  //     запрос
-  //   }, []);
-
-  const updateQueryString = e => {
-    if (e.target.value === '') {
-      return setSearchParams({});
+  useEffect(() => {
+    const getMovies = async () => {
+      try {
+        setStatus('pending');
+        const movies = await fetchMoviesBySearch(query);
+        setMovies(movies);
+        setStatus('responded');
+      } catch {
+        setStatus('rejected');
+      }
+    };
+    if (query) {
+      getMovies();
     }
-    setSearchParams({ movieId: e.target.value });
-  };
+  }, [query]);
 
-  const visibleMovie = movies.filter(movie => movie.includes(movieId));
-
-  console.log(location);
+  function onSubmit(e) {
+    e.preventDefault();
+    const { value } = e.target.query;
+    const query = value.trim() ? { query: value } : {};
+    setSearchParams(query);
+  }
 
   return (
     <div>
-      <input type="text" value={movieId} onChange={updateQueryString} />
-      <ul>
-        {visibleMovie.map(movie => {
-          return (
-            <li key={movie}>
-              <Link to={`${movie}`} state={{ from: location }}>
-                {movie}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      <SearchForm onSubmit={onSubmit}>
+        <Input type="text" name="query" placeholder="Search movies" />
+        <Button type="submit">Find</Button>
+      </SearchForm>
+      {status === 'responded' && <MovieList movies={movies} />}
+      {status === 'pending' && <Loader />}
+      {status === 'rejected' && <p>Something went wrong ...</p>}
     </div>
   );
 };
